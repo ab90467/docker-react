@@ -8,10 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker build -t cygnetops/react-test -f Dockerfile.dev .
-      - run: docker run -e CI=true cygnetops/react-test npm test
-
+      - run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+      - run: docker build -t johnnyo/react-test -f Dockerfile.prod .
+      - run: docker run -e CI=true johnnyo/react-test npm test
+      - run: docker logout
+        
       - name: Generate deployment package 📦
         run: zip -r deploy.zip . -x '*.git*'
 
@@ -20,8 +21,8 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: MyApplicationName
-          environment_name: MyApplication-Environment
+          application_name: docker-react
+          environment_name: Docker-react-env
           version_label: 12345
           region: us-west-2
           deployment_package: deploy.zip
