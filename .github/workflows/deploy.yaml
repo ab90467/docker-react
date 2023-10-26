@@ -22,6 +22,6 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
           application_name: docker-react
           environment_name: Docker-react-env
-          version_label: v1.0.1
+          version_label: v1.0.2
           region: eu-north-1
           deployment_package: deploy.zip
